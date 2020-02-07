@@ -9,10 +9,17 @@
         
         public ITrackable Parse(string line)
         {
-            logger.LogInfo("Begin parsing");
+            string[] cells = line.Split(',');
 
-            // Do not fail if one record parsing fails, return null
-            return null; // TODO Implement
+            if(cells.Length < 3)
+            {
+                logger.LogInfo("Invalid Data");
+                return null;
+            }
+
+            Point loc = new Point() { Latitude = double.Parse(cells[0]), Longitude = double.Parse(cells[1]) };
+            ITrackable parsed = new TacoBell() {Location = loc, Name = cells[2] };
+            return parsed;
         }
     }
 }
