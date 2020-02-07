@@ -13,7 +13,7 @@
 
             if(cells.Length < 3)
             {
-                logger.LogInfo("Invalid Data");
+                logger.LogWarning("Invalid Data");
                 return null;
             }
 

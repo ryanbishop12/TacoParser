@@ -14,8 +14,15 @@ namespace LoggingKata
         static void Main(string[] args)
         {
             logger.LogInfo("Log initialized");
-
+            
             string[] lines = File.ReadAllLines(csvPath);
+            if(lines.Length == 0)
+            {
+                logger.LogFatal("csv file empty");
+                return;
+            }
+            if (lines.Length == 1)
+                logger.LogWarning("csv file only has 1 line");
 
             logger.LogInfo("Begin parsing");
 
@@ -28,10 +35,18 @@ namespace LoggingKata
 
             logger.LogInfo("Creating List of GeoCoordinates");
             List<GeoCoordinate> geos = new List<GeoCoordinate>();
-            foreach (TacoBell taco in locations)
+            try
             {
-                geos.Add(new GeoCoordinate(taco.Location.Latitude, taco.Location.Longitude));
+                foreach (TacoBell taco in locations)
+                {
+                    geos.Add(new GeoCoordinate(taco.Location.Latitude, taco.Location.Longitude));
+                }
             }
+            catch (Exception e)
+            {
+                logger.LogError(null, e);
+            }
+
 
             logger.LogInfo("Creating List of Distance Between Two Taco Bells");
             List<Tuple<ITrackable, ITrackable, double>> distances = new List<Tuple<ITrackable, ITrackable, double>>();
