@@ -6,7 +6,7 @@ namespace LoggingKata
 {
     interface ITacoRepository
     {
-        void InsertTacoBell();
+        void InsertTacoBell(double latitude, double longitude, string taconame);
         IEnumerable<TacoBell> GetTacoBells();
     }
 }
