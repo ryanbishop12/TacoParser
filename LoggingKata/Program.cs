@@ -3,6 +3,9 @@ using System.Linq;
 using System.IO;
 using GeoCoordinatePortable;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace LoggingKata
 {
@@ -31,6 +34,15 @@ namespace LoggingKata
             logger.LogInfo("Begin parsing");
             TacoParser parser = new TacoParser();
             ITrackable[] locations = lines.Select(parser.Parse).ToArray();
+
+            //Retrive connection string from json file and passes the connection into TacoRepository
+            IConfigurationRoot config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+            string connString = config.GetConnectionString("DefaultConnection");
+            IDbConnection conn = new MySqlConnection(connString);
+            TacoRepository tacoRepository = new TacoRepository(conn);
             
             
             //tries to iterate through the array of taco bells
