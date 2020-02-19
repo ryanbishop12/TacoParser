@@ -17,11 +17,11 @@ namespace LoggingKata
         static void Main(string[] args)
         {
             logger.LogInfo("Log initialized");
-            
+
 
             //gets all the lines from the csv file in a comma deliniated string
             string[] lines = File.ReadAllLines(csvPath);
-            if(lines.Length == 0)
+            if (lines.Length == 0)
             {
                 logger.LogFatal("csv file empty");
                 return;
@@ -43,17 +43,29 @@ namespace LoggingKata
             string connString = config.GetConnectionString("DefaultConnection");
             IDbConnection conn = new MySqlConnection(connString);
             TacoRepository tacoRepository = new TacoRepository(conn);
-            
-            
+
+
+            List<TacoBell> tacoList = (List<TacoBell>)tacoRepository.GetTacoBells();
+            if (tacoList.Count == 0)
+            {
+                foreach (TacoBell tacoBell in locations)
+                {
+                    tacoRepository.InsertTacoBell(tacoBell.Location.Latitude, tacoBell.Location.Longitude, tacoBell.Name);
+                }
+
+            }
+
+            tacoList = (List<TacoBell>)tacoRepository.GetTacoBells();
+
             //tries to iterate through the array of taco bells
             //and uses the latitude and longitude of the taco bells
             //to create geocoordinates then stores those in a list named geos
-            //      throws an exception if a null refference
+            //      throws an exception if a null reference
             logger.LogInfo("Creating List of GeoCoordinates");
             List<GeoCoordinate> geos = new List<GeoCoordinate>();
             try
             {
-                foreach (TacoBell taco in locations)
+                foreach (TacoBell taco in tacoList)
                 {
                     geos.Add(new GeoCoordinate(taco.Location.Latitude, taco.Location.Longitude));
                 }
@@ -75,7 +87,7 @@ namespace LoggingKata
                 {
                     double dist = geos[i].GetDistanceTo(geos[x]);
                     Tuple<ITrackable, ITrackable, double> hold = new Tuple<ITrackable, ITrackable, double>
-                                                            (locations[i], locations[x], dist);
+                                                            (tacoList[i], tacoList[x], dist);
                     distances.Add(hold);
                 }
             }

@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="bin\Debug\netcoreapp2.0\appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Taco_Bell-US-AL-Alabama.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -14,6 +18,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.1" />
+    <PackageReference Include="MySql.Data" Version="8.0.19" />
   </ItemGroup>
 </Project>

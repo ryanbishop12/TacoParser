@@ -17,7 +17,13 @@ namespace LoggingKata
         }
         public IEnumerable<TacoBell> GetTacoBells()
         {
-            return _connection.Query<TacoBell>("SELECT * FROM tacobells;").ToList();
+            List<TacoBell> bells = _connection.Query<TacoBell>("SELECT * FROM tacobells;").ToList();
+            List<Point> points = _connection.Query<Point>("SELECT * FROM tacobells;").ToList();
+            for(int i = 0; i < bells.Count; i++)
+            {
+                bells[i].Location = points[i];
+            }
+            return bells;
         }
 
         public void InsertTacoBell(double latitude, double longitude, string taconame)
